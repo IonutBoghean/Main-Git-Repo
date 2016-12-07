@@ -1,0 +1,6 @@
+<apex:page standardController="Opportunity" docType="html-5.0">
+    <apex:outputText rendered="{!opportunity.StageName = 'Prospecting'}">Prospecting Tip</apex:outputText>
+    <apex:outputText rendered="{!opportunity.StageName = 'Needs Analysis'}">Needs Analysis Tip</apex:outputText>
+    <apex:outputText rendered="{!opportunity.StageName = 'Proposal/Price Quote'}">Proposal/Price Quote Tip</apex:outputText>
+    <apex:outputText rendered="{!opportunity.StageName = 'Negotiation/Review'}">Negotiation/Review Tip</apex:outputText>
+</apex:page>

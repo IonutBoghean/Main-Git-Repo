@@ -1,0 +1,24 @@
+<apex:component >
+    <!-- Bootstrap 3.3.4 -->
+    <apex:stylesheet value="{!URLFOR($Resource.CustomerPortalTheme, 'AdminLTE_2.2.0_no_plugins/bootstrap/css/bootstrap.min.css')}"/>
+    <!-- FontAwesome 4.3.0 -->
+    <apex:stylesheet value="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css"/>
+    <!-- Ionicons 2.0.0 -->
+    <apex:stylesheet value="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css"/>
+    <!-- Theme style -->
+    <apex:stylesheet value="{!URLFOR($Resource.CustomerPortalTheme, 'AdminLTE_2.2.0_no_plugins/dist/css/AdminLTE.min.css')}"/>
+    <!-- AdminLTE Skins -->
+    <apex:stylesheet value="{!URLFOR($Resource.CustomerPortalTheme, 'AdminLTE_2.2.0_no_plugins/dist/css/skins/skin-blue-light.min.css')}"/>
+    <!-- iCheck -->
+    <apex:stylesheet value="{!URLFOR($Resource.CustomerPortalThemePlugins, 'AdminLTE_2.2.0_plugins/iCheck/flat/blue.css')}"/>
+    <!-- Morris chart -->
+    <apex:stylesheet value="{!URLFOR($Resource.CustomerPortalThemePlugins, 'AdminLTE_2.2.0_plugins/morris/morris.css')}"/>
+    <!-- jvectormap -->
+    <apex:stylesheet value="{!URLFOR($Resource.CustomerPortalThemePlugins, 'AdminLTE_2.2.0_plugins/jvectormap/jquery-jvectormap-1.2.2.css')}"/>
+    <!-- Date Picker -->
+    <apex:stylesheet value="{!URLFOR($Resource.CustomerPortalThemePlugins, 'AdminLTE_2.2.0_plugins/datepicker/datepicker3.css')}"/>
+    <!-- Daterange picker -->
+    <apex:stylesheet value="{!URLFOR($Resource.CustomerPortalThemePlugins, 'AdminLTE_2.2.0_plugins/daterangepicker/daterangepicker-bs3.css')}"/>
+    <!-- bootstrap wysihtml5 - text editor -->
+    <apex:stylesheet value="{!URLFOR($Resource.CustomerPortalThemePlugins, 'AdminLTE_2.2.0_plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css')}"/>
+</apex:component>

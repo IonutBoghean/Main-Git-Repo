@@ -1,0 +1,19 @@
+<apex:page showHeader="true" sidebar="true" controller="AdyenCreatePaymentUrl" action="{!setupPayment}">
+	<!--<apex:form>
+	<apex:commandButton action="{!setupPayment}" value="Go to HPP"/>
+	
+	</apex:form>-->
+	<form method="post" action="https://test.adyen.com/hpp/pay.shtml" id="adyenForm" name="adyenForm" target="_parent">
+	<input type="text" name="merchantSig" value="{!merchantSig}" />
+	<input type="text" name="sessionValidity" value="{!sessionValidity}" />
+	<input type="text" name="shipBeforeDate" value="{!shipBeforeDate}" />
+	<input type="text" name="merchantAccount" value="{!merchantAccount}" />
+	<input type="text" name="paymentAmount" value="{!paymentAmount}" />
+	<input type="text" name="currencyCode" value="{!currencyCode}" />
+	<input type="text" name="skinCode" value="{!skinCode}" />
+	<input type="text" name="merchantReference" value="{!merchantReference}" />
+	<input type="text" name="shopperLocale" value="{!shopperLocale}" />
+	<input type="submit" value="Send" />
+	<input type="reset" />
+	</form>
+</apex:page>

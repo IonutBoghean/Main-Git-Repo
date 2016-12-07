@@ -1,0 +1,43 @@
+<apex:page showHeader="false" sidebar="false" standardStylesheets="false" docType="html-5.0">
+    <c:CustomerPortalCss />
+    <body class="skin-blue-light sidebar-mini">
+        <div class="wrapper">
+            <c:CustomerPortalHeader />
+            <c:CustomerPortalSidebar />
+            <div class="content-wrapper">
+                <section class="content-header">
+                    <h1> Account Information</h1>
+                    <ol class="breadcrumb">
+                        <li><i class="fa fa-user"></i> Account Information</li>
+                    </ol>
+                </section>
+                <section class="content">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="box box-solid">
+                                <div class="box-body">
+                                    <dl class="dl-horizontal">
+                                        <dt>Account Name:</dt>
+                                        <dd>Ionut Boghean</dd>
+                                        <dt>Contact Name:</dt>
+                                        <dd>Ionut Boghean</dd>
+                                        <dt>Address:</dt>
+                                        <dd>Berlin Berlin</dd>
+                                        <dd>10963 Germany</dd>
+                                        <dt>E-Mail:</dt>
+                                        <dd>ionut.boghean@empaua.com</dd>
+                                        <dt>Phone:</dt>
+                                        <dd>0040740325065</dd>
+                                        <dt>Mobile Phone:</dt>
+                                        <dd>0040740325065</dd>
+                                    </dl>
+                                </div><!-- /.box-body -->
+                            </div><!-- /.box -->
+                        </div><!-- ./col -->
+                    </div><!-- /.row -->
+                </section>
+            </div>
+        </div>
+        <c:CustomerPortalJs />
+    </body>
+</apex:page>

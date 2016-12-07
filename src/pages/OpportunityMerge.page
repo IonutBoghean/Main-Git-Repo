@@ -1,0 +1,191 @@
+<apex:page standardController="Opportunity" extensions="OpportunityMergeExtension" docType="html-5.0" >
+<html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <head>
+        <title>Opportunity Merge</title>
+        <apex:stylesheet value="{!URLFOR($Resource.SLDS212, 'assets/styles/salesforce-lightning-design-system-vf.css')}" />
+        <style>
+            .personal .slds-background--white {
+                background-color: white;
+            }
+            .personal .slds-box--custom {
+                border: 1px solid white;
+                background-color: #d8dde6;
+            }
+            .personal .slds-page-header--custom {
+                border-bottom: 0;
+            }
+        </style>
+    </head>
+    <body>
+        <apex:form >
+        <!-- REQUIRED SLDS WRAPPER -->
+        <div class="personal slds">
+            <div class="personal slds-page-header slds-background--white slds-page-header--custom" role="banner">
+                <div class="personal slds-grid">
+                    <div class="personal slds-col slds-has-flexi-truncate">
+                        <div class="personal slds-media">
+                            <div class="personal slds-media__figure">
+                                <svg aria-hidden="true" class="personal slds-icon slds-icon--large slds-icon-standard-opportunity">
+                                    <use xlink:href="{!URLFOR($Resource.SLDS212, 'assets/icons/standard-sprite/svg/symbols.svg#opportunity')}"></use>
+                                </svg>
+                            </div>
+                            <div class="personal slds-media__body">
+                                <p class="personal slds-text-heading--label">Master Record</p>
+                                <h1 class="personal slds-page-header__title slds-m-right--small slds-truncate slds-align-middle">{!opportunity.Name}</h1>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <apex:outputPanel id="main-panel">
+                <div class="personal slds-grid slds-page-header__detail-row">
+                    <article class="personal slds-card slds-background--white slds-p-bottom--small" id="backend-records-list">
+                        <div class="personal slds-card__header slds-grid">
+                            <header class="personal slds-media slds-media--center slds-has-flexi-truncate">
+                                <div class="personal slds-media__figure">
+                                    <svg aria-hidden="true" class="personal slds-icon slds-icon-standard-opportunity">
+                                        <use xlink:href="{!URLFOR($Resource.SLDS212, 'assets/icons/standard-sprite/svg/symbols.svg#opportunity')}"></use>
+                                    </svg>
+                                </div>
+                                <div class="personal slds-media__body slds-truncate">
+                                    <h2>
+                                        <span class="personal slds-text-heading--small">Backend Records ({!beckendRecordsSize})</span>
+                                    </h2>
+                                    <p class="slds-truncate">Select an opporutnity you want to merge</p>
+                                </div>
+                            </header>
+                        </div>
+                        <div class="personal slds-card__body">
+                            <div class="personal slds-card__body--inner slds-grid slds-wrap slds-grid--pull-padded">
+                                <apex:repeat value="{!backendRecords}" var="recordId">
+                                    <div class="personal slds-tile slds-box slds-box--custom slds-float--left slds-media slds-card__tile slds-p-horizontal--small slds-size--1-of-1 slds-medium-size--1-of-4 slds-hint-parent">
+                                        <div class="personal slds-media__figure">
+                                            <div class="personal slds-icon_container">
+                                                <svg aria-hidden="true" class="personal slds-icon slds-icon-standard-opportunity">
+                                                    <use xlink:href="{!URLFOR($Resource.SLDS212, 'assets/icons/standard-sprite/svg/symbols.svg#opportunity')}"></use>
+                                                </svg>
+                                            </div>
+                                        </div>
+                                        <div class="personal slds-media__body">
+                                            <div class="personal slds-grid slds-grid--align-spread slds-has-flexi-truncate">
+                                                <h3 class="personal slds-truncate" title="Related Record Title 1"><a href="/{!recordId}">{!backendRecords[recordId].Name}</a></h3>
+                                                <div class="personal slds-shrink-none">
+                                                    <a class="personal slds-button slds-button--neutral" data-role="opportunity-select" opportunityId="{!recordId}" opportunityName="{!backendRecords[recordId].Name}">Select</a>
+                                                </div>
+                                            </div>
+                                            <div class="personal slds-tile__detail slds-text-body--small">
+                                                <dl class="personal slds-dl--horizontal">
+                                                    <dt class="personal slds-dl--horizontal__label">
+                                                        <span class="personal slds-truncate" >Amount:</span>
+                                                    </dt>
+                                                    <dd class="personal slds-dl--horizontal__detail slds-tile__meta">
+                                                        <span class="personal slds-truncate" >€ <c:FormatNumberEuropean amount="{!backendRecords[recordId].Amount}"/></span>
+                                                    </dd>
+                                                    <dt class="personal slds-dl--horizontal__label">
+                                                        <span class="personal slds-truncate" >Close Date:</span>
+                                                    </dt>
+                                                    <dd class="personal slds-dl--horizontal__detail slds-tile__meta">
+                                                        <span class="personal slds-truncate" ><apex:outputText value="{0, date, dd.MM.yyyy}"><apex:param value="{!backendRecords[recordId].CloseDate}" /></apex:outputText></span>
+                                                    </dd>
+                                                </dl>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </apex:repeat>
+                            </div>
+                        </div>
+                    </article>
+                    <article class="personal slds-card slds-background--white slds-p-bottom--small slds-hide slds-size--1-of-1" id="field-list">
+                        <div class="personal slds-card__header slds-grid">
+                            <header class="personal slds-media slds-media--center slds-has-flexi-truncate">
+                                <div class="personal slds-media__figure">
+                                    <svg aria-hidden="true" class="personal slds-icon slds-icon-standard-opportunity">
+                                        <use xlink:href="{!URLFOR($Resource.SLDS212, 'assets/icons/standard-sprite/svg/symbols.svg#opportunity')}"></use>
+                                    </svg>
+                                </div>
+                                <div class="personal slds-media__body slds-truncate">
+                                    <h2>
+                                        <span class="personal slds-text-heading--small"><a href="#" id="selected-opportunity">an opportunity name</a></span>
+                                    </h2>
+                                    <p class="slds-truncate">Select fields to copy to master</p>
+                                </div>
+                            </header>
+                        </div>
+                        <div class="personal slds-card__body">
+                            <div class="personal slds-card__body--inner slds-grid slds-wrap slds-grid--pull-padded">
+                                <apex:repeat value="{!mergeFields}" var="field">
+                                    <div class="personal slds-tile slds-box slds-m-right--small slds-float--left slds-media slds-card__tile slds-p-horizontal--small slds-size--1-of-7 slds-hint-parent">
+                                        <div class="personal slds-float--left slds-size--1-of-2">{!field.label}</div>
+                                        <div class="personal slds-form-element__control slds-float--right slds-size--1-of-2">
+                                            <label class="personal slds-checkbox slds-float--right">
+                                                <apex:inputCheckbox value="{!field.isSelected}" html-data-role="field-select"/>
+                                                <span class="personal slds-checkbox--faux"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </apex:repeat>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+                <div class="personal slds-grid slds-page-header__detail-row slds-hide" id="alert-panel">
+                    <div class="personal slds-theme--error slds-size--1-of-1 slds-p-around--x-small">
+                        You have to select at least on field to merge!!
+                    </div>
+                </div>
+                <div class="personal slds-grid slds-page-header__detail-row">
+                    <a class="personal slds-button slds-button--neutral slds-hide" id="back-button">Back</a>
+                    <a class="personal slds-button slds-button--neutral slds-hide" id="merge-button">Merge</a>
+                    <button class="personal slds-button slds-button--neutral">
+                        <svg aria-hidden="true" class="personal slds-button__icon slds-button__icon--left">
+                           <!--  <use xlink:href="{!URLFOR{$Resource.SLDS212, 'assets/icons/utility-sprite/svg/symbols.svg#add')}"></use> -->
+                        </svg>
+                        Save
+                    </button>
+                </div>
+                </apex:outputPanel>
+            </div>
+        </div>
+        <input id="selectedOppId" name="selectedOppId" type="text" style="display:none;"/>
+        <apex:actionFunction action="{!mergeRecords}" name="merge"/>
+        </apex:form>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+        <script type="text/javascript">
+            var myJq = jQuery.noConflict();
+            myJq(document).ready(function() {
+                myJq('[data-role="opportunity-select"]').click(function(){
+                    myJq('#backend-records-list').addClass('slds-hide');
+                    myJq('#field-list').removeClass('slds-hide');
+                    myJq('#selected-opportunity').prop('href', '/' + myJq(this).attr('opportunityId'));
+                    myJq('#selected-opportunity').html(myJq(this).attr('opportunityName'));
+                    myJq('#selectedOppId').val(myJq(this).attr('opportunityId'));
+                    myJq('#back-button').removeClass('slds-hide');
+                    myJq('#merge-button').removeClass('slds-hide');
+                    myJq('input[type="checkbox"][data-role="field-select"]').prop('checked',false);
+                });
+                myJq('#back-button').click(function(){
+                    myJq('#backend-records-list').removeClass('slds-hide');
+                    myJq('#field-list').addClass('slds-hide');
+                    myJq('#selectedOppId').val('');
+                    myJq(this).addClass('slds-hide');
+                    myJq('#merge-button').addClass('slds-hide');
+                    myJq('#alert-panel').addClass('slds-hide');
+                    back();
+                });
+                myJq('input[type="checkbox"][data-role="field-select"]').on('change',function(){
+                    if(this.checked) {
+                        myJq('#alert-panel').addClass('slds-hide');
+                    }
+                });
+                myJq('#merge-button').click(function(){
+                    var noOfSelectedFields = myJq('input[type="checkbox"][data-role="field-select"]:checked').length;
+                    if(!noOfSelectedFields || noOfSelectedFields == 0) {
+                        myJq('#alert-panel').removeClass('slds-hide');
+                    } else {
+                        merge();
+                    }
+                });
+            });
+        </script>
+    </body>
+</html>
+</apex:page>

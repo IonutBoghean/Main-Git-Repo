@@ -1,0 +1,25 @@
+<apex:page showHeader="true" sidebar="true" controller="BuildSobjectTree" action="{!buildTree}">
+	<ul style="display: {!IF(tree.size > 0, 'inline', 'none')}">
+	<apex:repeat value="{!tree}" var="node">
+		<li>
+			<apex:outputText value="{!node.record['Id']}"/>
+			<ul style="display: {!IF(node.children.size > 0, 'inline', 'none')}"> 
+				<apex:repeat value="{!node.children}" var="childNode">
+					<li>
+						<apex:outputText value="{!childNode.record['Id']}"/>
+						<ul style="display: {!IF(childNode.children.size > 0, 'inline', 'none')}"> 
+							<li>
+								another possible level
+							</li>	
+						</ul>
+					</li>
+				</apex:repeat>
+			</ul>
+		</li>
+	</apex:repeat>
+	</ul>
+    <apex:iframe width="854" height="510" src="https://player.vimeo.com/video/138645198?badge=0" frameborder="0"/>
+    <apex:iframe width="854" height="510" src="https://www.youtube.com/watch?v=ofTECLrCG1k" frameborder="0"/>
+    
+    <apex:flash play="true" loop="true" src="http://www.tizag.com/pics/example.swf"  height="300" width="50%" />
+</apex:page>

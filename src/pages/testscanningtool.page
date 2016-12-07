@@ -1,0 +1,35 @@
+<apex:page controller="testscanner">
+<apex:outputPanel id="comp">
+<apex:form >
+<apex:inputHidden value="{!imagecode}" id="testing"/>
+<apex:includeScript value="{!$Resource.scanner}"/>
+<script>
+function myCallBackFunc(success, mesg, thumbs, images) {
+console.log('start callback');
+  for(var i = 0; (images instanceof Array) && i < images.length; i++){
+    addImage(images[i]); // 'images' is a <div>
+  }
+  console.log('finish callback');
+}
+function addImage(imgObj) {
+console.log('start addimage');
+console.log(imgObj.mimetype);
+  var hiddeninput = document.getElementById('{!$Component.testing}');
+  hiddeninput.value += imgObj.data;
+  console.log('finihs addimage');
+}
+function scan() {
+  com_asprise_scan_request(myCallBackFunc, // callback on dialog closed
+com_asprise_scan_cmd_method_SCAN, // action: SCAN
+com_asprise_scan_cmd_return_IMAGES_AND_THUMBNAILS, // return types
+{'wia-version': 2,
+'format': 'PDF'
+} // options
+  );
+}
+</script>
+<button type="button" onclick="scan();">Scan</button>
+<apex:commandButton action="{!submit}" value="submit" reRender="comp"/>
+</apex:form>
+</apex:outputPanel>
+</apex:page>

@@ -1,0 +1,4 @@
+<apex:page standardController="Contact" docType="html-5.0">
+    <apex:outputField value="{!contact.AssistantName}"/>
+    <apex:outputLink value="tel:{!contact.AssistantPhone}">{!contact.AssistantPhone}</apex:outputLink>
+</apex:page>

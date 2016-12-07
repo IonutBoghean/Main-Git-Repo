@@ -1,0 +1,15 @@
+<apex:page controller="testhtmltemplate">
+  <!-- Begin Default Content REMOVE THIS -->
+  <h1>Congratulations</h1>
+  This is your new Page
+  <!-- End Default Content REMOVE THIS -->
+  
+  <apex:form >
+      <apex:inputField value="{!template.body}"/>
+        <apex:inputField value="{!template.markup}"/>
+        <apex:inputField value="{!template.htmlvalue}"/>
+        <apex:inputFile value="{!body}"/>
+        <apex:inputFile value="{!body1}"/>
+        <apex:image url="{!URLFOR($Action.Attachment.Download, '00P24000002TWHt')}" />
+  </apex:form>
+</apex:page>
