@@ -1,0 +1,11 @@
+<apex:page controller="testselectpicklist">
+<apex:form >
+    <apex:selectList value="{!key}">
+        <apex:selectOptions value="{!options}"/>
+    </apex:selectList>
+    <apex:outputText value="{!key}"/>
+    <apex:commandButton action="{!save}" value="save"/>
+    {!URLFOR($Action.Attachment.Download, pictureId)}"
+    {!$Site.BaseUrl}
+</apex:form>
+</apex:page>

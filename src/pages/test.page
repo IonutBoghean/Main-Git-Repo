@@ -1,0 +1,252 @@
+<apex:page standardController="Opportunity" showHeader="true" sidebar="true" docType="html-5.0" >
+<html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <head>
+        <title>Choose Clinic</title>
+
+    </head>
+    
+    <body>
+        <!-- REQUIRED SLDS WRAPPER -->
+        <div class="medidate slds">   
+            <div class="medidate slds-page-header" role="banner">
+                <div class="medidate slds-grid">
+                    <div class="medidate slds-col slds-has-flexi-truncate">
+                        <div class="medidate slds-media">
+                            <div class="medidate slds-media__figure">
+                                <svg aria-hidden="true" class="medidate slds-icon slds-icon--large slds-icon-standard-user">
+
+                                </svg>
+                            </div>
+                            <div class="medidate slds-media__body">
+                                <p class="medidate slds-text-heading--label">Choose Clinic</p>
+                                <h1 class="medidate slds-page-header__title slds-m-right--small slds-truncate slds-align-middle">{!opportunity.Name}</h1>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="medidate slds-grid slds-page-header__detail-row">
+                    <article class="medidate slds-card slds-size--1-of-1">
+                        <header class="medidate slds-card__header slds-grid">
+                            <div class="medidate slds-tile slds-media">
+                                <div class="medidate slds-media__figure">
+                                    <svg aria-hidden="true" class="medidate slds-icon slds-icon-action-map">
+
+                                    </svg>
+                                </div>
+                                <div class="medidate slds-media__body">
+                                    <h3 class="medidate slds-truncate" ><a href="javascript:void(0);">Map</a></h3>
+                                    <div class="medidate slds-tile__detail slds-text-body--small">
+                                        <ul class="medidate slds-list--horizontal slds-has-dividers--right">
+                                            <li class="medidate slds-item">Nearby Clinics</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </header>
+                        <div class="medidate slds-card__body slds-text-align--center">
+                            <div id="googleMap" style="width:100%; height: 300px"></div>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </div>
+        <script type="text/javascript">
+            function initialize() {
+                var myOptions = { mapTypeId: google.maps.MapTypeId.ROADMAP};
+                var map = new google.maps.Map(document.getElementById("googleMap"), myOptions);
+                var bounds = new google.maps.LatLngBounds();
+                
+
+                    addPin(map, bounds, '10', '10', "test", "");
+
+
+
+
+                map.fitBounds(bounds);
+             }
+             
+             function addPin(map, bounds, latitude, longitude, title, image) {
+                var infowindow = new google.maps.InfoWindow({content: title});
+                var myLatLng = {lat: parseFloat(latitude), lng: parseFloat(longitude)};
+                var marker = new google.maps.Marker({
+                    position: myLatLng,
+                    map: map,
+                    title: title
+                });
+                marker.addListener('click', function() {infowindow.open(map, marker);});
+                bounds.extend(marker.getPosition());
+             }
+    
+        </script>
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBPQZbhsPiFPvBt76BP1aG5G3RCMFYXVDg&signed_in=true&callback=initialize"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.14.1/moment.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+        <script type="text/javascript">
+            var myJq = jQuery.noConflict();
+            
+            myJq(document).ready(function() {
+                myJq('input:radio[name=bedStatus]').change(function() {
+                    agenda.calendarId = this.value;
+                    checkAuth();
+                });
+            });
+            
+            // Your Client ID can be retrieved from your project in the Google
+            // Developer Console, https://console.developers.google.com
+            var CLIENT_ID = '985249796054-5j0vfbddb2irkb863pusktsqm6t1js5e.apps.googleusercontent.com';
+    
+            var SCOPES = ["https://www.googleapis.com/auth/calendar.readonly"];
+    
+            /**
+             * Check if current user has authorized this application.
+             */
+            function checkAuth() {
+                gapi.auth.authorize(
+                {
+                    'client_id': CLIENT_ID,
+                    'scope': SCOPES.join(' '),
+                    'immediate': true
+                }, handleAuthResult);
+            }
+    
+            /**
+             * Handle response from authorization server.
+             *
+             * @param {Object} authResult Authorization result.
+             */
+            function handleAuthResult(authResult) {
+                var authorizeDiv = document.getElementById('authorize-div');
+                if (authResult && !authResult.error) {
+                    // Hide auth UI, then load client library.
+                    authorizeDiv.style.display = 'none';
+                    loadCalendarApi();
+                } else {
+                    // Show auth UI, allowing the user to initiate authorization by
+                    // clicking authorize button.
+                    authorizeDiv.style.display = 'inline';
+                }
+            }
+    
+            /**
+             * Initiate auth flow in response to user clicking authorize button.
+             *
+             * @param {Event} event Button click event.
+             */
+            function handleAuthClick(event) {
+                gapi.auth.authorize(
+                    {client_id: CLIENT_ID, scope: SCOPES, immediate: false},
+                    handleAuthResult);
+                return false;
+            }
+    
+            /**
+             * Load Google Calendar client library. List upcoming events
+             * once client library is loaded.
+             */
+            function loadCalendarApi() {
+                gapi.client.load('calendar', 'v3', listUpcomingEvents);
+            }
+    
+            /**
+             * Print the summary and start datetime/date of the next ten events in
+             * the authorized user's calendar. If no events are found an
+             * appropriate message is printed.
+             */
+            function listUpcomingEvents() {
+                var request = gapi.client.calendar.events.list({
+                    'calendarId': agenda.calendarId,
+
+
+                    'fields': 'items(description,end,start,status,summary,id)',
+                    'singleEvents': true,
+                    'timeZone': 'Europe/Bucharest',
+                    'orderBy': 'startTime'
+                });
+    
+                request.execute(function(resp) {
+                    console.log(resp);
+                    var events = resp.items;
+                    if (events && events.length > 0) {
+                        agenda.displayData(events);
+                    } else {
+                        agenda.displayNoData();
+                    }
+                });
+            }
+            
+            agenda = {
+                calendarId : '',
+                timeMin: '',
+                timeMax: '',
+                display : function() {
+                    myJq("#agenda").addClass("slds-show");
+                    myJq("#agenda").removeClass("slds-hide");
+                },
+                hide : function() {
+                    myJq("#agenda").addClass("slds-hide");
+                    myJq("#agenda").removeClass("slds-show");
+                },
+                displayData : function(events) {
+                    this.display();
+                    this.hideNoData();
+                    myJq("#agenda-output").addClass("slds-show");
+                    myJq("#agenda-output").removeClass("slds-hide");
+                    this.buildAgendaTable(events);
+                },
+                hideData : function(events) {
+                    myJq("#agenda-output").addClass("slds-hide");
+                    myJq("#agenda-output").removeClass("slds-show");
+                },
+                displayNoData : function() {
+                    this.display();
+                    this.hideData();
+                    myJq("#no-agenda-output").addClass("slds-show");
+                    myJq("#no-agenda-output").removeClass("slds-hide");
+                },
+                hideNoData : function() {
+                    myJq("#no-agenda-output").addClass("slds-hide");
+                    myJq("#no-agenda-output").removeClass("slds-show");
+                },
+                buildAgendaTable : function(events) {
+                    var agendaWrapper = myJq("#agenda-output");
+                    var table = myJq("<table></table>").addClass("medidate slds-table slds-table--bordered slds-table--fixed-layout").attr("data-role", "grid");
+                        var thead = myJq("<thead></thead>");
+                            var headerRow = myJq("<tr></tr>").addClass("medidate slds-text-heading--label");
+                                var headerCell = myJq("<th></th>").addClass("medidate slds-text-heading--label slds-size--1-of-12").attr("scope", "col").text("Name");
+                                headerRow.append(headerCell);
+                                headerCell = myJq("<th></th>").addClass("medidate slds-text-heading--label slds-size--1-of-12").attr("scope", "col").text("Time");
+                                headerRow.append(headerCell);
+                                headerCell = myJq("<th></th>").addClass("medidate slds-text-heading--label slds-size--1-of-12").attr("scope", "col");
+                                headerRow.append(headerCell);
+                            thead.append(headerRow);
+                        table.append(thead);
+                        var tbody = myJq("<tbody></tbody>");
+                            var tableRow;
+                            var tableCell;
+                            var inputRadio;
+                            for (i = 0; i < events.length; i++) {
+                                var event = events[i];
+                                var when = event.start.dateTime;
+                                if (!when) {
+                                    when = event.start.date;
+                                }
+                                inputRadio = myJq("<input></input>").attr("type","radio").attr("name","agenda-item");
+                                tableRow = myJq("<tr></tr>").addClass("medidate slds-hint-parent");
+                                tableCell = myJq("<td></td>").addClass("medidate slds-size--1-of-12").text(event.summary);
+                                tableRow.append(tableCell);
+                                tableCell = myJq("<td></td>").addClass("medidate slds-size--1-of-12").text(moment(when).format("hh:mm"));
+                                tableRow.append(tableCell);
+                                tableCell = myJq("<td></td>").addClass("medidate slds-size--1-of-12").append(inputRadio);
+                                tableRow.append(tableCell);
+                                tbody.append(tableRow);
+                            }
+                        table.append(tbody);
+                    agendaWrapper.append(table);
+                }
+            };
+        </script>
+        <script src="https://apis.google.com/js/client.js">
+        </script>
+    </body>
+</html>
+</apex:page>

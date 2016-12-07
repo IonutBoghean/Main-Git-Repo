@@ -1,0 +1,21 @@
+<apex:page standardController="Opportunity" recordSetVar="opportunities" 
+              tabStyle="Opportunity"
+    sidebar="false" showheader="false">
+    <apex:form >
+        <apex:pageBlock title="Person Accounts">
+            <apex:pageMessages />
+            
+
+            
+            <apex:pageBlockTable value="{!opportunities}" var="opp" id="opp_table">
+                <apex:column value="{!opp.name}"/>
+                <apex:column headerValue="Stage">
+                    <apex:outputField value="{!opp.stageName}"/>
+                </apex:column>
+                <apex:column headerValue="Close Date">
+                    <apex:outputField value="{!opp.closeDate}"/>
+                </apex:column>
+            </apex:pageBlockTable>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

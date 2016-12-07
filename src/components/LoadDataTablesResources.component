@@ -1,0 +1,20 @@
+<apex:component >
+    <apex:stylesheet value="{!URLFOR($Resource.DataTablesResources, 'DataTablesResources/css/bootstrap.min.css')}"/>
+    <apex:stylesheet value="{!URLFOR($Resource.DataTablesResources, 'DataTablesResources/css/dataTables.bootstrap.css')}"/>
+    <apex:stylesheet value="{!URLFOR($Resource.DataTablesResources, 'DataTablesResources/css/dataTables.colVis.css')}"/>
+    <apex:stylesheet value="{!URLFOR($Resource.DataTablesResources, 'DataTablesResources/css/dataTables.tableTools.min.css')}"/>
+    <apex:stylesheet value="{!URLFOR($Resource.DataTablesResources, 'DataTablesResources/css/customCss.css')}"/>
+    <apex:stylesheet value="{!URLFOR($Resource.DataTablesResources, 'DataTablesResources/font-awesome-4.3.0/css/font-awesome.css')}"/>
+    <apex:stylesheet value="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.0/css/bootstrap-datepicker.css"/>
+    
+    <apex:includeScript value="{!URLFOR($Resource.DataTablesResources, 'DataTablesResources/js/jquery-1.10.2.min.js')}"/>
+    <apex:includeScript value="{!URLFOR($Resource.DataTablesResources, 'DataTablesResources/js/jquery-dataTables.min.js')}"/>
+    <apex:includeScript value="{!URLFOR($Resource.DataTablesResources, 'DataTablesResources/js/dataTables.tableTools.min.js')}"/>
+    <apex:includeScript value="{!URLFOR($Resource.DataTablesResources, 'DataTablesResources/js/dataTables.bootstrap.js')}"/>
+    <apex:includeScript value="{!URLFOR($Resource.DataTablesResources, 'DataTablesResources/js/dataTables.colVis.js')}"/>
+    <apex:includeScript value="{!URLFOR($Resource.DataTablesResources, 'DataTablesResources/js/bootstrap.min.js')}"/>
+    <apex:includeScript value="{!URLFOR($Resource.DataTablesResources, 'DataTablesResources/js/bootbox.min.js')}"/>
+    <apex:includeScript value="{!URLFOR($Resource.DataTablesResources, 'DataTablesResources/js/dataTables.responsive.js')}"/>
+    <apex:includeScript value="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.4.0/moment.js"/>
+    <apex:includeScript value="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.0/js/bootstrap-datepicker.js"/>
+</apex:component>

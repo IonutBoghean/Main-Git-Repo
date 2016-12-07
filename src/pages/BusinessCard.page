@@ -1,0 +1,9 @@
+<apex:page docType="html-5.0">
+    <apex:outputText value="{!$User.FirstName}"/>
+    <apex:outputText value="{!$User.LastName}"/>
+    <apex:outputText value="{!$User.Email}"/>
+    <apex:outputText value="{!$User.Phone}"/>
+    <apex:outputText value="{!$User.Title}"/>
+    <input type="email" id="email"/>
+    <button onclick="return false;">Send</button>
+</apex:page>

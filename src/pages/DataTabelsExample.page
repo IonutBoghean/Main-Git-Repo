@@ -1,0 +1,239 @@
+<apex:page id="page" controller="DataTabelsExampleController" standardStylesheets="true" sidebar="false">
+    <apex:outputPanel id="scripts">
+        <c:LoadDataTablesResources />
+        <script>
+            $(document).ready(function() { 
+                //add the filter Header row with class = filterRow  
+                $('table.table > thead > tr').eq(0).before('<tr class="filterRow"></tr>');
+                $('table.table thead th').each( function () {
+                    if($(this).index() == 0){
+                        $('tr.filterRow').append('<th></th>');
+                    }else{
+                        $('tr.filterRow').append('<th><input class="form-control" type="text" placeholder="{!$Label.SearchLabel} '+$(this).text()+'" /> </th>');
+                    }
+                });
+                // ------------------------ DataTable --------------------------------- //
+                var table = $('table.table').DataTable({
+                    dom: '<"clear">lfrtip<"clear spacer">CT',
+                    "colVis": {
+                        "exclude": [ 0 ],
+                        "restore": "{!$Label.ColVisRestoreText}",
+                        "showAll": "{!$Label.ColVisShowAllText}",
+                        "showNone": "{!$Label.ColVisShowNoneText}",
+                        "overlayFade": 300,
+                        "buttonText": "{!$Label.ShowHideButtonText}"
+                    },
+                    "order": [[ 1, "asc" ]],
+                    "columnDefs": [
+                      { "orderable": false, "targets": 0 },
+                      { "searchable": false, "targets": 0 }
+                    ],
+                    "bStateSave": true,
+                    "responsive": true,
+                    "language": {
+                        "sEmptyTable":     "{!$Label.LanguageEmptyTable}",
+                        "sInfo":           "{!$Label.LanguageInfo}",
+                        "sInfoEmpty":      "{!$Label.LanguageInfoEmpty}",
+                        "sInfoFiltered":   "{!$Label.LanguageInfoFiltered}",
+                        "sInfoPostFix":    "",
+                        "sInfoThousands":  "{!$Label.LanguageInfoThousands}",
+                        "sLengthMenu":     "{!$Label.LanguageLengthMenu}",
+                        "sLoadingRecords": "{!$Label.LanguageLoadingRecords}",
+                        "sProcessing":     "{!$Label.LanguageProcessing}",
+                        "sSearch":         "{!$Label.LanguageSearch}",
+                        "sZeroRecords":    "{!$Label.LanguageZeroRecords}",
+                        "oPaginate": {
+                            "sFirst":    "{!$Label.LanguageFirst}",
+                            "sLast":     "{!$Label.LanguageLast}",
+                            "sNext":     "{!$Label.LanguageNext}",
+                            "sPrevious": "{!$Label.LanguagePrevious}"
+                        },
+                        "oAria": {
+                            "sSortAscending":  "{!$Label.LanguageSortAscending}",
+                            "sSortDescending": "{!$Label.LanguageSortDescending}"
+                        }
+                    },
+                    "oTableTools": {
+                        "sRowSelect": "none",
+                        "sSwfPath": "//cdn.datatables.net/tabletools/2.2.2/swf/copy_csv_xls_pdf.swf",
+                        "aButtons": [ 
+                            {
+                                "sExtends":    "collection",
+                                "sButtonText": "{!$Label.PrintButtonText}",
+                                "sButtonClass": "btn-primary btnGroup",
+                                "aButtons": [ 
+                                    {
+                                       "sExtends": "print",
+                                       "sButtonText": "{!$Label.PrintAllButtonText}",
+                                       "fnComplete": function ( nButton, oConfig, oFlash, sFlash ) {
+                                            $('.filterRow').hide();
+                                            $('.headerRow th:first-child').hide();
+                                            $('.footer th:first-child').hide();
+                                            $('.actionColumn').hide();
+                                        }
+                                    },
+                                    {
+                                       "sExtends": "print",
+                                       "sButtonText": "{!$Label.PrintCurrentButtonText}",
+                                       "bShowAll": false,
+                                       "fnComplete": function ( nButton, oConfig, oFlash, sFlash ) {
+                                            $('.filterRow').hide();
+                                            $('.headerRow th:first-child').hide();
+                                            $('.actionColumn').hide();
+                                            $('.footer th:first-child').hide(); 
+                                        }
+                                    }
+                                ]
+                            },
+                            {
+                                "sExtends":    "collection",
+                                "sButtonText": "{!$Label.DownloadButtonText}",
+                                "sButtonClass": "btn-primary btnGroup",
+                                "aButtons": [ 
+                                    {
+                                        "sExtends": "csv",
+                                        "sButtonText": "Csv",
+                                        "mColumns": "visible"
+                                    },
+                                    {
+                                        "sExtends": "pdf",
+                                        "sButtonText": "Pdf",
+                                        "mColumns": "visible"
+                                    }, 
+                                ]
+                            },
+                            {
+                                "sExtends": "copy",
+                                "sButtonClass": "btn-primary btnGroup",
+                                "sButtonText": "{!$Label.CopyButtonText}",
+                                "mColumns": "visible",
+                                "oSelectorOpts": {
+                                    page: 'current'
+                                }
+                            }
+                        ]
+                    },
+                    "fnInitComplete": function(oSettings, json) {
+                        //do something
+                        $('.btn-group').css("float","right");
+                        $('.btn-group a').css("margin-left","2px");
+                        $('.ColVis').css("width","50%");
+                        $('.ColVis button').removeClass("ColVis_Button ColVis_MasterButton");
+                        $('.ColVis button').addClass("btn btn-primary");
+                        toggleFirstCells();
+                        $('table.table').css({"width":"99.9%","margin-left":"auto","margin-right":"auto"});
+                        $('.ColVis_catcher').click(function(){
+                            $('ul.ColVis_collection').css({"list-style-type":"none",
+                                                        "transform":"translate(-50%, -50%) !important",
+                                                        "left":"50% !important",
+                                                        "top": "50% !important",
+                                                        "position":"fixed !important",
+                                                        "width":"inherit !important"});
+                        });
+                    },
+                    "fnDrawCallback": function( oSettings ) {
+                        $('.actionColumn').css("display","table-cell");
+                    }
+                });   
+                // hide the order images for the action column
+                $('.headerRow th:first-child').removeClass('sorting_desc');
+                $('.headerRow th:first-child').removeClass('sorting_asc');
+                $('.headerRow th:first-child').removeClass('sorting');
+                //Add event for escape key // escape key maps to keycode `27`
+                function toggleFirstCells(){
+                    $(document).keyup(function(e) {
+                        if (e.keyCode == 27){ 
+                            $('.filterRow').show(); 
+                            $('.headerRow th:first-child').show();
+                            $('.footer th:first-child').show();
+                            $('.actionColumn').css("display","table-cell");
+                        }   
+                    });
+                }
+                // Restore state
+                var state = table.state.loaded();
+                if ( state ) {
+                    table.columns().eq( 0 ).each( function (colIdx) {
+                        if(colIdx > 0){
+                            var colSearch = state.columns[colIdx].search;
+                            if ( colSearch.search ) {
+                                $( 'input', $('tr.filterRow th').eq(colIdx)).val( colSearch.search );
+                            }
+                        }
+                    });
+                    table.draw();
+                }
+                
+                // Apply the search
+                function applySearch(){
+                    table.columns().eq( 0 ).each( function ( colIdx ) {
+                        if(colIdx > 0){
+                            $( 'input', $('tr.filterRow th').eq(colIdx)).on( 'keyup change', function () {
+                                table
+                                    .column(colIdx)
+                                    .search( this.value )
+                                    .draw();
+                            });
+                        }
+                    });
+                }
+                
+                //call apply search
+                applySearch();
+                    
+                $('.ColVis').click(function(){
+                    $('.ColVis_collection li').bind( "click", function() {
+                        var index = $(this).index() + 2; 
+                        if($(this).index() != 0){
+                            $( 'input', $('tr.filterRow th').eq(index)).val("");
+                            table
+                                .column(index)
+                                .search( "" )
+                                .draw();
+                        }
+                    });
+                });
+            });
+        </script>
+    </apex:outputPanel>
+    <apex:sectionHeader title="{!$Label.SectionHeaderTitle}"/>
+    <apex:form id="form">
+        <apex:pageBlock mode="mainDetail" id="pb" >
+            <table class="table table-striped table-bordered" footerClass="footer" id="pbTable">
+                <thead>
+                    <tr class="headerRow">
+                        <th>Actions</th>
+                        <th>Name</th>
+                        <apex:repeat value="{!$ObjectType[objectType].FieldSets[objectType + fieldSetNameSuffix]}" var="field">
+                            <th>{!field.Label}</th>
+                        </apex:repeat>
+                    </tr>
+                </thead>
+                <tfoot>
+                    <tr class="totalRow footer">
+                        <th class="totalRow footer" scope="col" colspan="1" rowspan="1">&nbsp;</th>
+                        <th class="totalRow footer" scope="col" colspan="1" rowspan="1"></th>
+                        <apex:repeat value="{!$ObjectType[objectType].FieldSets[objectType + fieldSetNameSuffix]}" var="field">
+                            <th class="totalRow footer" scope="col" colspan="1" rowspan="1"></th>
+                        </apex:repeat>
+                    </tr>
+                </tfoot>
+                <tbody>
+                    <apex:repeat value="{!records}" var="record">
+                        <tr>
+                            <td>
+                                <a href="/{!record['Id']}/e?retURL=%2Fapex%2FDataTabelsExample%3FobjectType%3D{!objectType}">{!$Label.ActionEdit}</a>
+                                &nbsp;|&nbsp;
+                                <a href="/{!record['Id']}">{!$Label.ActionView}</a>
+                            </td>
+                            <td>{!record['Name']}</td>
+                            <apex:repeat value="{!$ObjectType[objectType].FieldSets[objectType + fieldSetNameSuffix]}" var="field">
+                                <td>{!record[field]}</td>
+                            </apex:repeat>
+                        </tr>
+                    </apex:repeat>
+                </tbody>
+            </table>
+        </apex:pageBlock>    
+    </apex:form> 
+</apex:page>

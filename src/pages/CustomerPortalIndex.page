@@ -1,0 +1,12 @@
+<apex:page showHeader="false" sidebar="false" standardStylesheets="false" docType="html-5.0">
+    <c:CustomerPortalCss />
+    <body class="skin-blue-light sidebar-mini">
+        <div class="wrapper">
+            <c:CustomerPortalHeader />
+            <c:CustomerPortalSidebar />
+            <div class="content-wrapper">
+            </div>
+        </div>
+        <c:CustomerPortalJs />
+    </body>
+</apex:page>
